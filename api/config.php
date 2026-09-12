@@ -1,14 +1,33 @@
 <?php
 // api/config.php
 
-// CORS Headers
-$origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
-if (isset($_SERVER['HTTP_ORIGIN'])) {
-    header("Access-Control-Allow-Origin: " . $origin);
-} else {
-    header("Access-Control-Allow-Origin: *");
+// Robust Request Origin detection across Apache, Nginx, LiteSpeed, and CGI/FastCGI
+$origin = '';
+if (!empty($_SERVER['HTTP_ORIGIN'])) {
+    $origin = $_SERVER['HTTP_ORIGIN'];
+} elseif (function_exists('getallheaders')) {
+    $headers = getallheaders();
+    foreach ($headers as $key => $value) {
+        if (strtolower($key) === 'origin') {
+            $origin = $value;
+            break;
+        }
+    }
 }
 
+if (empty($origin) && !empty($_SERVER['HTTP_REFERER'])) {
+    $parsed = parse_url($_SERVER['HTTP_REFERER']);
+    if (isset($parsed['scheme']) && isset($parsed['host'])) {
+        $origin = $parsed['scheme'] . '://' . $parsed['host'] . (isset($parsed['port']) ? ':' . $parsed['port'] : '');
+    }
+}
+
+if (empty($origin)) {
+    $origin = 'http://localhost:3000';
+}
+
+header("Access-Control-Allow-Origin: " . $origin);
+header("Vary: Origin");
 header("Access-Control-Allow-Credentials: true");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization, X-Requested-With");

@@ -1,0 +1,17 @@
+# api/.htaccess
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Pass Authorization & Origin headers in CGI/FastCGI environments
+    SetEnvIf Authorization "(.*)" HTTP_AUTHORIZATION=$1
+    SetEnvIf Origin "(.*)" HTTP_ORIGIN=$1
+
+    # Ensure OPTIONS preflight requests pass cleanly to PHP scripts
+    RewriteCond %{REQUEST_METHOD} OPTIONS
+    RewriteRule ^(.*)$ $1 [L]
+</IfModule>
+
+<IfModule mod_headers.c>
+    # Ensure Vary header is set so CDNs/browsers cache per-origin CORS correctly
+    Header append Vary Origin
+</IfModule>
