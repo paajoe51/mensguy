@@ -1,5 +1,5 @@
 // lib/api.ts
-export const API_BASE_URL = process.env.NEXT_PUBLIC_PHP_API_URL || 'http://localhost/mensguy_v1/api';
+export const API_BASE_URL = process.env.NEXT_PUBLIC_PHP_API_URL || 'https://mensguy.kmcompanies.net/api';
 
 /**
  * Standard fetchWrapper for API calls that automatically includes credentials (cookies)

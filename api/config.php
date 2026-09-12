@@ -2,17 +2,11 @@
 // api/config.php
 
 // CORS Headers
-$origin = $_SERVER['HTTP_ORIGIN'] ?? 'http://localhost:3000';
-$allowed_origins = [
-    'http://localhost:3000',
-    'http://127.0.0.1:3000',
-    getenv('ALLOWED_ORIGIN') ?: ''
-];
-
-if (in_array($origin, array_filter($allowed_origins))) {
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '*';
+if (isset($_SERVER['HTTP_ORIGIN'])) {
     header("Access-Control-Allow-Origin: " . $origin);
 } else {
-    header("Access-Control-Allow-Origin: http://localhost:3000");
+    header("Access-Control-Allow-Origin: *");
 }
 
 header("Access-Control-Allow-Credentials: true");
@@ -53,10 +47,11 @@ try {
 
 // Ensure session is started safely
 if (session_status() === PHP_SESSION_NONE) {
+    $isHttps = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off';
     session_start([
         'cookie_httponly' => true,
-        'cookie_secure' => isset($_SERVER['HTTPS']),
-        'cookie_samesite' => 'Lax'
+        'cookie_secure' => $isHttps,
+        'cookie_samesite' => $isHttps ? 'None' : 'Lax'
     ]);
 }
 ?>
