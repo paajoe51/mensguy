@@ -1,8 +1,8 @@
 -- Complete Database Schema and Seed Data for MENSGUY IMPORT LTD
--- Database Name: mensguy_db
+-- Database Name: kmcompan_mensguy
 
-CREATE DATABASE IF NOT EXISTS `mensguy_db` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-USE `mensguy_db`;
+CREATE DATABASE IF NOT EXISTS `kmcompan_mensguy` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE `kmcompan_mensguy`;
 
 -- 1. Users Table
 CREATE TABLE IF NOT EXISTS `users` (
