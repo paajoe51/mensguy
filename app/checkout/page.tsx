@@ -28,7 +28,7 @@ import { fetchApi } from "@/lib/api"
 import { useCart } from "@/lib/cart"
 import { toast } from "sonner"
 
-export default function CheckoutPage() {
+function CheckoutForm() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const requestId = searchParams.get("request")
@@ -493,3 +493,22 @@ export default function CheckoutPage() {
     </div>
   )
 }
+
+export default function CheckoutPage() {
+  return (
+    <React.Suspense
+      fallback={
+        <div className="flex min-h-screen flex-col">
+          <Header />
+          <main className="flex-1 pt-20 flex h-[400px] items-center justify-center">
+            <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </main>
+          <Footer />
+        </div>
+      }
+    >
+      <CheckoutForm />
+    </React.Suspense>
+  )
+}
+
